@@ -1,0 +1,9 @@
+{
+  "name": "storylynx-api-graphcms",
+  "version": "0.0.1",
+  "description": "StoryLynx GraphCMS API plugin",
+  "main": "index.js",
+  "repository": "git@github.com:arxpoetica/storylynx-api-graphcms.git",
+  "author": "@arxpoetica",
+  "license": "MIT"
+}
