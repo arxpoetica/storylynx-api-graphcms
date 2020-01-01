@@ -1,8 +1,7 @@
-import { cmsQuery } from '../../loaders.js'
+const { cms_query } = require('../../loaders.js')
 
-export async function single({ slug }) {
-
-	const { article } = await cmsQuery(`{
+module.exports = async function({ slug }) {
+	const { article } = await cms_query(`{
 		article(where: { slug: "${slug}" }) {
 			slug
 			headline
@@ -16,5 +15,4 @@ export async function single({ slug }) {
 		}
 	}`)
 	return { article }
-
 }

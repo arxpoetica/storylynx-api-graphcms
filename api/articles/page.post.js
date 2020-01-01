@@ -1,6 +1,6 @@
-import { cmsQuery } from '../../loaders.js'
+const { cms_query } = require('../../loaders.js')
 
-export async function page({ page, page_size, tags }) {
+module.exports = async function({ page, page_size, tags }) {
 
 	let where
 	if (tags && tags.length) {
@@ -11,7 +11,7 @@ export async function page({ page, page_size, tags }) {
 		where = '{ status: PUBLISHED }'
 	}
 
-	const { articles, articlesConnection } = await cmsQuery(`{
+	const { articles, articlesConnection } = await cms_query(`{
 		articles(
 			first: ${page_size},
 			skip: ${(page - 1) * page_size},
@@ -31,9 +31,8 @@ export async function page({ page, page_size, tags }) {
 	}`)
 
 	return {
-		page_size,
 		items: articles,
-		itemsCount: articlesConnection.aggregate.count,
+		items_count: articlesConnection.aggregate.count,
 	}
 
 }

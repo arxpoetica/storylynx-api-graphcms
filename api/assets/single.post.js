@@ -1,8 +1,8 @@
-import { cmsQuery } from '../../loaders.js'
+const { cms_query } = require('../../loaders.js')
 
-export async function single({ slug }) {
+module.exports = async function({ slug }) {
 
-	const { resource } = await cmsQuery(`{
+	const { resource } = await cms_query(`{
 		resource(where: { slug: "${slug}" }) {
 			id
 			publishedDatetime

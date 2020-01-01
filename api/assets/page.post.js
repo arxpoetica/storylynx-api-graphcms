@@ -1,6 +1,6 @@
-import { cmsQuery } from '../../loaders.js'
+const { cms_query } = require('../../loaders.js')
 
-export async function page({ page, page_size, tags, type, decade, subject, search_term }) {
+module.exports = async function({ page, page_size, tags, type, decade, subject, search_term }) {
 
 	let where = '{ AND: ['
 	where += '{ status: PUBLISHED }'
@@ -27,7 +27,7 @@ export async function page({ page, page_size, tags, type, decade, subject, searc
 	}
 	where += '] }'
 
-	const { resources, resourcesConnection, content_types, subjects } = await cmsQuery(`{
+	const { resources, resourcesConnection, content_types, subjects } = await cms_query(`{
 		resources(
 			first: ${page_size},
 			skip: ${(page - 1) * page_size},
@@ -58,9 +58,8 @@ export async function page({ page, page_size, tags, type, decade, subject, searc
 	}`)
 
 	return {
-		page_size,
 		items: resources,
-		itemsCount: resourcesConnection.aggregate.count,
+		items_count: resourcesConnection.aggregate.count,
 		content_types: content_types.enumValues.map(val => val.name),
 		subjects: subjects.enumValues.map(val => val.name),
 	}
