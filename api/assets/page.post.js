@@ -27,39 +27,39 @@ module.exports = async function({ page, page_size, tags, type, decade, subject, 
 	}
 	where += '] }'
 
-	const { resources, resourcesConnection, content_types, subjects } = await cms_query(`{
-		resources(
+	const { asset_groups, meta, content_types, subjects } = await cms_query(`{
+		asset_groups: resources(
 			first: ${page_size},
 			skip: ${(page - 1) * page_size},
 			where: ${where},
 			orderBy: publishedDatetime_DESC
 		) {
 			id
-			publishedDatetime
+			published: publishedDatetime
 			title
 			slug
 			assets {
-				cover { url summary handle mimeType fileName }
-				id url summary handle mimeType fileName
+				cover { url summary handle mime_type: mimeType filename: fileName }
+				id url summary handle mime_type: mimeType filename: fileName
 			}
-			assetLinks {
+			asset_links: assetLinks {
 				summary
 				link
 				cover { url handle }
 			}
-			contentType
+			content_type: contentType
 			year
 			subject
 		}
 
-		resourcesConnection(where: ${where}) { aggregate { count } }
+		meta: resourcesConnection(where: ${where}) { aggregate { count } }
 		content_types: __type(name: "ContentTypes") { enumValues { name } }
 		subjects: __type(name: "Subjects") { enumValues { name } }
 	}`)
 
 	return {
-		items: resources,
-		items_count: resourcesConnection.aggregate.count,
+		items: asset_groups,
+		items_count: meta.aggregate.count,
 		content_types: content_types.enumValues.map(val => val.name),
 		subjects: subjects.enumValues.map(val => val.name),
 	}

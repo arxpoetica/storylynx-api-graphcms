@@ -2,26 +2,29 @@ const { cms_query } = require('../../loaders.js')
 
 module.exports = async function({ slug }) {
 
-	const { resource } = await cms_query(`{
-		resource(where: { slug: "${slug}" }) {
+	const { asset_group } = await cms_query(`{
+		asset_group: resource(where: { slug: "${slug}" }) {
 			id
-			publishedDatetime
+			published: publishedDatetime
 			title
 			summary
 			detail { html }
-			assets { id url summary handle fileName width height mimeType }
-			assetLinks {
+			assets { id url summary handle filename: fileName width height mime_type: mimeType }
+			asset_links: assetLinks {
 				summary
 				link
 				cover { url handle }
 			}
-			tags { tag }
-			contentType
+			tags { name: tag }
+			content_type: contentType
 			year
 			subject
 			source
 		}
 	}`)
-	return { resource }
+
+	asset_group.tags = asset_group.tags.map(tag => tag.name)
+
+	return { asset_group }
 
 }
