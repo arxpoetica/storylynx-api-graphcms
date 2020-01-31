@@ -11,28 +11,33 @@ module.exports = async function({ page, page_size, tags }) {
 		where = '{ status: PUBLISHED }'
 	}
 
-	const { articles, articlesConnection } = await cms_query(`{
-		articles(
+	const { posts, meta } = await cms_query(`{
+		posts: articles(
 			first: ${page_size},
 			skip: ${(page - 1) * page_size},
 			where: ${where},
 			orderBy: publishedDatetime_DESC
 		) {
 			id
-			publishedDatetime
+			published: publishedDatetime
 			headline
 			subheadline
 			slug
-			assets { id url summary handle mimeType fileName }
-			tags { tag }
+			assets { id url summary handle mime_type: mimeType filename: fileName }
+			tags { name: tag }
 		}
 
-		articlesConnection(where: ${where}) { aggregate { count } }
+		meta: articlesConnection(where: ${where}) { aggregate { count } }
 	}`)
 
+	const items = posts.map(post => {
+		post.tags = post.tags.map(tag => tag.name)
+		return post
+	})
+
 	return {
-		items: articles,
-		items_count: articlesConnection.aggregate.count,
+		items,
+		items_count: meta.aggregate.count,
 	}
 
 }
