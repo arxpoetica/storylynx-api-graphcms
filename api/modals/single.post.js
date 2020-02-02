@@ -13,6 +13,9 @@ module.exports = async function({ name }) {
 				name
 				order
 				type
+				classes
+				styles
+				html { html }
 				sequences: children {
 					id
 					name
@@ -37,6 +40,17 @@ module.exports = async function({ name }) {
 			}
 		}
 	}`)
+
+	// TODO: how deep will this go? fine for now
+	modal.rootclip.html = modal.rootclip.html.html
+	modal.rootclip.sequences = modal.rootclip.sequences.map(sequence => {
+		sequence.html = sequence.html.html
+		sequence.clips = sequence.clips.map(clip => {
+			clip.html = clip.html.html
+			return clip
+		})
+		return sequence
+	})
 
 	return { modal }
 
