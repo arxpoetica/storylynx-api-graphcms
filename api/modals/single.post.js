@@ -16,7 +16,7 @@ module.exports = async function({ name }) {
 				classes
 				styles
 				html { html }
-				sequences: children {
+				sequences: children(orderBy: order_ASC) {
 					id
 					name
 					order
@@ -24,15 +24,17 @@ module.exports = async function({ name }) {
 					classes
 					styles
 					html { html }
-					clips: children {
+					clips: children(orderBy: order_ASC) {
 						id
 						name
 						order
 						type
+						template
+						theme
 						classes
 						styles
 						html { html }
-						# assets { id }
+						assets { id handle url source summary height width size }
 						# intervals { id }
 						# children {}
 					}
