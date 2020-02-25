@@ -12,26 +12,21 @@ module.exports = async function({ name }) {
 				id
 				name
 				order
-				type
-				classes
 				styles
 				html { html }
 				sequences: children(orderBy: order_ASC) {
 					id
 					name
 					order
-					type
-					classes
 					styles
 					html { html }
 					clips: children(orderBy: order_ASC) {
 						id
 						name
 						order
-						type
 						template
-						theme
-						classes
+						themes
+						transition
 						styles
 						html { html }
 						assets { id handle url source summary height width size }
@@ -49,6 +44,7 @@ module.exports = async function({ name }) {
 		sequence.html = sequence.html.html
 		sequence.clips = sequence.clips.map(clip => {
 			clip.html = clip.html.html
+			clip.template = clip.template || 'Column'
 			return clip
 		})
 		return sequence
