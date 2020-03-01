@@ -2,10 +2,14 @@ const { cms_query } = require('../../loaders.js')
 
 module.exports = async function({ name }) {
 
-	// TODO: maybe just return modal, root clip, and sequence IDs
+	// if (process.env.LYNX_CACHE_STORY) {
+	// 	return { story: require('./_cache.js') }
+	// }
+
+	// TODO: maybe just return story, root clip, and sequence IDs
 	// -- load sequences seperately???
-	const { modal } = await cms_query(`query {
-		modal(where: { name: "${name.toLowerCase()}" }) {
+	const { story } = await cms_query(`query {
+		story(where: { name: "${name.toLowerCase()}" }) {
 			id
 			name
 			rootclip {
@@ -39,8 +43,8 @@ module.exports = async function({ name }) {
 	}`)
 
 	// TODO: how deep will this go? fine for now
-	modal.rootclip.html = modal.rootclip.html.html
-	modal.rootclip.sequences = modal.rootclip.sequences.map(sequence => {
+	story.rootclip.html = story.rootclip.html.html
+	story.rootclip.sequences = story.rootclip.sequences.map(sequence => {
 		sequence.html = sequence.html.html
 		sequence.clips = sequence.clips.map(clip => {
 			clip.html = clip.html.html
@@ -50,6 +54,6 @@ module.exports = async function({ name }) {
 		return sequence
 	})
 
-	return { modal }
+	return { story }
 
 }
