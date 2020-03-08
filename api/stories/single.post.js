@@ -29,7 +29,7 @@ module.exports = async function({ title }) {
 						transition
 						styles
 						html { html }
-						assets { id handle url source summary height width size }
+						assets { id handle url source summary height width size mime_type: mimeType }
 						# intervals { id }
 						# children {}
 					}
